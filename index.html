@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 JACOBELLY ARCADE - TRAMPA DE GALLETAS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #8A2BE2, #4B0082);
+            min-height: 100vh;
+            color: #FFFFFF;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #FFFFFF;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .slogan {
+            font-size: 1.2em;
+            color: #FFF;
+            background: linear-gradient(90deg, #FF69B4, #9370DB);
+            padding: 8px 15px;
+            border-radius: 25px;
+            display: inline-block;
+        }
+
+        .difficulty {
+            background: #FF4444;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            border: 2px solid #9370DB;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            background: linear-gradient(90deg, #9370DB, #FF69B4);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-area {
+            position: relative;
+            height: 500px;
+            background: linear-gradient(180deg, #6A5ACD, #483D8B);
+            border: 3px solid #FF69B4;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-screen, .results {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border: 2px solid #FF69B4;
+            backdrop-filter: blur(10px);
+            color: #333;
+        }
+
+        .start-btn, .play-again {
+            background: linear-gradient(45deg, #9370DB, #FF69B4);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(147, 112, 219, 0.4);
+        }
+
+        .start-btn:hover, .play-again:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(147, 112, 219, 0.6);
+        }
+
+        .dona {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            user-select: none;
+            animation: float 1.5s infinite alternate;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.4));
+            z-index: 10;
+        }
+
+        .dona.rapida {
+            animation: float 0.8s infinite alternate;
+            font-size: 32px;
+        }
+
+        .galleta-mala {
+            animation: shake 0.6s infinite alternate;
+            font-size: 55px;
+            filter: drop-shadow(2px 2px 6px rgba(220, 53, 69, 0.6));
+        }
+
+        @keyframes float {
+            from { transform: translateY(0px) rotate(0deg); }
+            to { transform: translateY(-10px) rotate(12deg); }
+        }
+
+        @keyframes shake {
+            from { transform: translateX(-6px) rotate(-12deg); }
+            to { transform: translateX(6px) rotate(12deg); }
+        }
+
+        .dona:hover {
+            transform: scale(1.15);
+        }
+
+        .prize {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #9370DB;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 182, 193, 0.2);
+            border: 2px dashed #FF69B4;
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border: 2px solid #9370DB;
+            color: #333;
+        }
+
+        .instructions h3 {
+            color: #9370DB;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.4em;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .instructions li {
+            padding: 12px 0;
+            border-bottom: 1px solid #E6E6FA;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .instructions li:before {
+            content: "•";
+            color: #FF69B4;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .note {
+            margin-top: 20px;
+            font-style: italic;
+            color: #666;
+            text-align: center;
+            background: #F8F8FF;
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 4px solid #9370DB;
+        }
+
+        .final-score {
+            font-size: 1.8em;
+            color: #9370DB;
+            margin: 20px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            font-size: 1em;
+            color: #666;
+            background: #F8F8FF;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .warning {
+            color: #dc3545;
+            font-weight: bold;
+            background: #ffe6e6;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid #dc3545;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 JACOBELLY ARCADE</h1>
+            <p class="slogan">¡Donde tu antojo tiene trampas!</p>
+            <div class="difficulty">GALLETAS TRAMPOSAS ACTIVADAS 🚨</div>
+        </header>
+
+        <div class="game-container">
+            <div class="score-board">
+                <div class="score">Puntos: <span id="points">0</span></div>
+                <div class="time">Tiempo: <span id="time">30</span>s</div>
+                <div class="lives">Vidas: <span id="lives">3</span> ❤️</div>
+            </div>
+
+            <div class="game-area" id="gameArea">
+                <div class="start-screen" id="startScreen">
+                    <h2>🍩 SUPERVIVENCIA EXTREMA 🍩</h2>
+                    <div class="warning">⚠️ ¡CUIDADO CON LAS GALLETAS GRANDES! ⚠️</div>
+                    <p>🎯 <strong>Donas normales</strong> 🍩 = +5 Puntos</p>
+                    <p>⚡ <strong>Donas rápidas</strong> 🍩 = +8 Puntos</p>
+                    <p>💀 <strong>Galletas trampa</strong> 🍪 = -1 Vida</p>
+                    <button onclick="startGame()" class="start-btn">¡ACEPTAR EL RETO!</button>
+                </div>
+
+                <div class="results" id="results" style="display: none;">
+                    <h2>🎉 ¡JUEGO TERMINADO!</h2>
+                    <p class="final-score">Puntaje final: <span id="finalScore">0</span></p>
+                    <div class="prize" id="prize"></div>
+                    <div class="game-stats">
+                        <div>Donas atrapadas: <span id="caughtDonas">0</span></div>
+                        <div>Galletas evitadas: <span id="avoidedCookies">0</span></div>
+                    </div>
+                    <button onclick="resetGame()" class="play-again">¿OTRO INTENTO?</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>🏆 PREMIOS (¡Casi imposibles!):</h3>
+            <ul>
+                <li>🏅 80+ puntos: Galleta GRATIS + 25% DESCUENTO</li>
+                <li>⭐ 50-79 puntos: 20% DESCUENTO en donas</li>
+                <li>🍩 30-49 puntos: 15% DESCUENTO en galletas</li>
+                <li>💝 10-29 puntos: 10% DESCUENTO en tu compra</li>
+                <li>😅 0-9 puntos: Un abrazo de ánimo</li>
+            </ul>
+            <p class="note">📸 Toma screenshot del premio y muéstranos en JACOBELLY</p>
+        </div>
+    </div>
+
+    <script>
+        let points = 0;
+        let timeLeft = 30;
+        let lives = 3;
+        let gameInterval;
+        let itemInterval;
+        let gameStarted = false;
+        let caughtDonas = 0;
+        let avoidedCookies = 0;
+
+        function startGame() {
+            if (gameStarted) return;
+            
+            gameStarted = true;
+            points = 0;
+            timeLeft = 30;
+            lives = 3;
+            caughtDonas = 0;
+            avoidedCookies = 0;
+            
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('results').style.display = 'none';
+            
+            updateDisplay();
+            
+            gameInterval = setInterval(updateTimer, 1000);
+            itemInterval = setInterval(createItem, 700);
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            document.getElementById('time').textContent = timeLeft;
+            
+            if (timeLeft <= 0 || lives <= 0) {
+                endGame();
+            }
+        }
+
+        function createItem() {
+            if (!gameStarted) return;
+            
+            const gameArea = document.getElementById('gameArea');
+            const item = document.createElement('div');
+            
+            // 60% dona normal, 20% dona rápida, 20% galleta trampa
+            const random = Math.random();
+            
+            if (random < 0.6) {
+                // Dona normal
+                item.className = 'dona';
+                item.innerHTML = '🍩';
+                item.onclick = function() {
+                    points += 5;
+                    caughtDonas++;
+                    updateDisplay();
+                    this.style.transform = 'scale(1.4)';
+                    this.style.opacity = '0.8';
+                    setTimeout(() => {
+                        if (gameArea.contains(this)) {
+                            gameArea.removeChild(this);
+                        }
+                    }, 200);
+                };
+            } else if (random < 0.8) {
+                // Dona rápida
+                item.className = 'dona rapida';
+                item.innerHTML = '🍩';
+                item.onclick = function() {
+                    points += 8;
+                    caughtDonas++;
+                    updateDisplay();
+                    this.style.transform = 'scale(1.4)';
+                    this.style.opacity = '0.8';
+                    setTimeout(() => {
+                        if (gameArea.contains(this)) {
+                            gameArea.removeChild(this);
+                        }
+                    }, 200);
+                };
+            } else {
+                // Galleta trampa (GRANDE y que quita vida)
+                item.className = 'dona galleta-mala';
+                item.innerHTML = '🍪';
+                item.style.fontSize = '60px';
+                item.onclick = function() {
+                    lives--;
+                    avoidedCookies++;
+                    updateDisplay();
+                    this.style.transform = 'scale(1.5)';
+                    this.style.opacity = '0.7';
+                    setTimeout(() => {
+                        if (gameArea.contains(this)) {
+                            gameArea.removeChild(this);
+                        }
+                    }, 250);
+                };
+            }
+            
+            const size = item.className.includes('galleta-mala') ? 80 : Math.random() * 30 + 40;
+            item.style.width = size + 'px';
+            item.style.height = size + 'px';
+            
+            const left = Math.random() * (gameArea.offsetWidth - size - 20) + 10;
+            item.style.left = left + 'px';
+            item.style.top = '-80px';
+            
+            gameArea.appendChild(item);
+            
+            let position = -80;
+            const speed = item.className.includes('rapida') ? 4 : 
+                         item.className.includes('galleta-mala') ? 2.5 : 3;
+            const fallInterval = setInterval(() => {
+                if (!gameStarted) {
+                    clearInterval(fallInterval);
+                    return;
+                }
+                
+                position += speed;
+                item.style.top = position + 'px';
+                
+                if (position > gameArea.offsetHeight + 50) {
+                    clearInterval(fallInterval);
+                    if (gameArea.contains(item)) {
+                        gameArea.removeChild(item);
+                    }
+                }
+            }, 25);
+        }
+
+        function updateDisplay() {
+            document.getElementById('points').textContent = points;
+            document.getElementById('time').textContent = timeLeft;
+            document.getElementById('lives').textContent = lives;
+        }
+
+        function endGame() {
+            gameStarted = false;
+            clearInterval(gameInterval);
+            clearInterval(itemInterval);
+            
+            // Remover todos los items
+            const items = document.querySelectorAll('.dona');
+            items.forEach(item => item.remove());
+            
+            // Mostrar resultados
+            document.getElementById('finalScore').textContent = points;
+            document.getElementById('caughtDonas').textContent = caughtDonas;
+            document.getElementById('avoidedCookies').textContent = avoidedCookies;
+            
+            const prizeElement = document.getElementById('prize');
+            
+            let prizeText = '';
+            if (points >= 80) {
+                prizeText = '🏅 ¡LEYENDA! Galleta GRATIS + 25% DESCUENTO 🍪';
+            } else if (points >= 50) {
+                prizeText = '⭐ ¡IMPRESIONANTE! 20% DESCUENTO en donas 🍩';
+            } else if (points >= 30) {
+                prizeText = '🍩 ¡BIEN HECHO! 15% DESCUENTO en galletas 🎯';
+            } else if (points >= 10) {
+                prizeText = '💝 ¡BUEN INTENTO! 10% DESCUENTO en tu compra ✨';
+            } else {
+                prizeText = '😅 ¡Casi! Te damos un abrazo de ánimo 🤗';
+            }
+            
+            prizeElement.innerHTML = prizeText;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function resetGame() {
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+            gameStarted = false;
+        }
+    </script>
+</body>
+</html>
