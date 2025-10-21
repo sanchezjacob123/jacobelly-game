@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 JACOBELLY ARCADE - TRAMPA DE GALLETAS</title>
+    <title>🎮 JACOBELLY ARCADE - SISTEMA DE NOMBRES ÚNICOS</title>
     <style>
         * {
             margin: 0;
@@ -87,7 +87,7 @@
             box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.3);
         }
 
-        .start-screen, .results {
+        .start-screen, .results, .name-screen {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -100,9 +100,11 @@
             border: 2px solid #FF69B4;
             backdrop-filter: blur(10px);
             color: #333;
+            width: 90%;
+            max-width: 400px;
         }
 
-        .start-btn, .play-again {
+        .start-btn, .play-again, .confirm-btn {
             background: linear-gradient(45deg, #9370DB, #FF69B4);
             color: white;
             border: none;
@@ -116,9 +118,26 @@
             box-shadow: 0 5px 15px rgba(147, 112, 219, 0.4);
         }
 
-        .start-btn:hover, .play-again:hover {
+        .start-btn:hover, .play-again:hover, .confirm-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 20px rgba(147, 112, 219, 0.6);
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 2px solid #9370DB;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: #FF69B4;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
         }
 
         .dona {
@@ -169,6 +188,27 @@
             border-radius: 10px;
             background: rgba(255, 182, 193, 0.2);
             border: 2px dashed #FF69B4;
+        }
+
+        .customer-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #9370DB;
+        }
+
+        .customer-name {
+            font-size: 1.3em;
+            color: #9370DB;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .customer-id {
+            font-size: 0.9em;
+            color: #666;
+            font-family: monospace;
         }
 
         .instructions {
@@ -248,14 +288,24 @@
             border: 1px solid #dc3545;
             font-size: 1.1em;
         }
+
+        .unique-code {
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🎮 JACOBELLY ARCADE</h1>
-            <p class="slogan">¡Donde tu antojo tiene trampas!</p>
-            <div class="difficulty">GALLETAS TRAMPOSAS ACTIVADAS 🚨</div>
+            <p class="slogan">¡Sistema de Nombres Únicos!</p>
+            <div class="difficulty">CÓDIGO ÚNICO POR CLIENTE 🔒</div>
         </header>
 
         <div class="game-container">
@@ -266,19 +316,41 @@
             </div>
 
             <div class="game-area" id="gameArea">
-                <div class="start-screen" id="startScreen">
+                <!-- Pantalla de Nombre -->
+                <div class="name-screen" id="nameScreen">
+                    <h2>👤 REGISTRO JACOBELLY</h2>
+                    <p>Ingresa el nombre para la factura:</p>
+                    <input type="text" id="customerName" class="name-input" placeholder="Ej: María González" maxlength="30">
+                    <p class="note">⚠️ Este nombre será único y no podrá ser reutilizado</p>
+                    <button onclick="startGame()" class="confirm-btn">CONFIRMAR Y JUGAR</button>
+                </div>
+
+                <!-- Pantalla de Inicio -->
+                <div class="start-screen" id="startScreen" style="display: none;">
                     <h2>🍩 SUPERVIVENCIA EXTREMA 🍩</h2>
                     <div class="warning">⚠️ ¡CUIDADO CON LAS GALLETAS GRANDES! ⚠️</div>
                     <p>🎯 <strong>Donas normales</strong> 🍩 = +5 Puntos</p>
                     <p>⚡ <strong>Donas rápidas</strong> 🍩 = +8 Puntos</p>
                     <p>💀 <strong>Galletas trampa</strong> 🍪 = -1 Vida</p>
-                    <button onclick="startGame()" class="start-btn">¡ACEPTAR EL RETO!</button>
+                    <button onclick="showNameScreen()" class="start-btn">¡COMENZAR JUEGO!</button>
                 </div>
 
+                <!-- Pantalla de Resultados -->
                 <div class="results" id="results" style="display: none;">
                     <h2>🎉 ¡JUEGO TERMINADO!</h2>
+                    
+                    <!-- Información del Cliente -->
+                    <div class="customer-info">
+                        <div class="customer-name" id="displayCustomerName">Cliente: </div>
+                        <div class="customer-id">ID Único: <span id="uniqueCode"></span></div>
+                    </div>
+
                     <p class="final-score">Puntaje final: <span id="finalScore">0</span></p>
                     <div class="prize" id="prize"></div>
+                    
+                    <!-- Código Único -->
+                    <div class="unique-code" id="uniqueCodeDisplay"></div>
+                    
                     <div class="game-stats">
                         <div>Donas atrapadas: <span id="caughtDonas">0</span></div>
                         <div>Galletas evitadas: <span id="avoidedCookies">0</span></div>
@@ -297,7 +369,8 @@
                 <li>💝 20-39 puntos: 5% DESCUENTO en tu compra</li>
                 <li>😅 0-19 puntos: Un abrazo de ánimo</li>
             </ul>
-            <p class="note">📸 Toma screenshot del premio y muéstranos en JACOBELLY</p>
+            <p class="note">📸 Toma screenshot de ESTA PANTALLA COMPLETA y muéstranos en JACOBELLY<br>
+            ⚠️ Incluye el CÓDIGO ÚNICO para canjear tu premio</p>
         </div>
     </div>
 
@@ -310,9 +383,28 @@
         let gameStarted = false;
         let caughtDonas = 0;
         let avoidedCookies = 0;
+        let customerName = "";
+        let uniqueCode = "";
+
+        function showNameScreen() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('nameScreen').style.display = 'block';
+            document.getElementById('customerName').focus();
+        }
 
         function startGame() {
+            customerName = document.getElementById('customerName').value.trim();
+            
+            if (customerName === "") {
+                alert("Por favor ingresa un nombre para continuar");
+                return;
+            }
+            
             if (gameStarted) return;
+            
+            // Generar código único basado en nombre y timestamp
+            const timestamp = new Date().getTime();
+            uniqueCode = "JAC" + timestamp.toString().slice(-6) + customerName.slice(0, 3).toUpperCase();
             
             gameStarted = true;
             points = 0;
@@ -321,7 +413,7 @@
             caughtDonas = 0;
             avoidedCookies = 0;
             
-            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('nameScreen').style.display = 'none';
             document.getElementById('results').style.display = 'none';
             
             updateDisplay();
@@ -445,10 +537,13 @@
             const items = document.querySelectorAll('.dona');
             items.forEach(item => item.remove());
             
-            // Mostrar resultados
+            // Mostrar resultados con información del cliente
             document.getElementById('finalScore').textContent = points;
             document.getElementById('caughtDonas').textContent = caughtDonas;
             document.getElementById('avoidedCookies').textContent = avoidedCookies;
+            document.getElementById('displayCustomerName').textContent = "Cliente: " + customerName;
+            document.getElementById('uniqueCode').textContent = uniqueCode;
+            document.getElementById('uniqueCodeDisplay').textContent = "CÓDIGO ÚNICO: " + uniqueCode;
             
             const prizeElement = document.getElementById('prize');
             
@@ -472,7 +567,16 @@
         function resetGame() {
             document.getElementById('results').style.display = 'none';
             document.getElementById('startScreen').style.display = 'block';
+            document.getElementById('nameScreen').style.display = 'none';
+            document.getElementById('customerName').value = "";
             gameStarted = false;
+            customerName = "";
+            uniqueCode = "";
+        }
+
+        // Mostrar pantalla de inicio al cargar
+        window.onload = function() {
+            document.getElementById('startScreen').style.display = 'block';
         }
     </script>
 </body>
