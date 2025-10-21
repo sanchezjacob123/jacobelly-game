@@ -289,13 +289,13 @@
         </div>
 
         <div class="instructions">
-            <h3>🏆 PREMIOS (¡Casi imposibles!):</h3>
+            <h3>🏆 PREMIOS (¡Esfuérzate!):</h3>
             <ul>
-                <li>🏅 80+ puntos: Galleta GRATIS + 25% DESCUENTO</li>
-                <li>⭐ 50-79 puntos: 20% DESCUENTO en donas</li>
-                <li>🍩 30-49 puntos: 15% DESCUENTO en galletas</li>
-                <li>💝 10-29 puntos: 10% DESCUENTO en tu compra</li>
-                <li>😅 0-9 puntos: Un abrazo de ánimo</li>
+                <li>🏅 80+ puntos: Galleta GRATIS + 15% DESCUENTO</li>
+                <li>⭐ 60-79 puntos: 10% DESCUENTO en donas</li>
+                <li>🍩 40-59 puntos: 8% DESCUENTO en galletas</li>
+                <li>💝 20-39 puntos: 5% DESCUENTO en tu compra</li>
+                <li>😅 0-19 puntos: Un abrazo de ánimo</li>
             </ul>
             <p class="note">📸 Toma screenshot del premio y muéstranos en JACOBELLY</p>
         </div>
@@ -454,15 +454,15 @@
             
             let prizeText = '';
             if (points >= 80) {
-                prizeText = '🏅 ¡LEYENDA! Galleta GRATIS + 25% DESCUENTO 🍪';
-            } else if (points >= 50) {
-                prizeText = '⭐ ¡IMPRESIONANTE! 20% DESCUENTO en donas 🍩';
-            } else if (points >= 30) {
-                prizeText = '🍩 ¡BIEN HECHO! 15% DESCUENTO en galletas 🎯';
-            } else if (points >= 10) {
-                prizeText = '💝 ¡BUEN INTENTO! 10% DESCUENTO en tu compra ✨';
+                prizeText = '🏅 ¡INCREÍBLE! Galleta GRATIS + 15% DESCUENTO 🍪';
+            } else if (points >= 60) {
+                prizeText = '⭐ ¡IMPRESIONANTE! 10% DESCUENTO en donas 🍩';
+            } else if (points >= 40) {
+                prizeText = '🍩 ¡BIEN HECHO! 8% DESCUENTO en galletas 🎯';
+            } else if (points >= 20) {
+                prizeText = '💝 ¡BUEN INTENTO! 5% DESCUENTO en tu compra ✨';
             } else {
-                prizeText = '😅 ¡Casi! Te damos un abrazo de ánimo 🤗';
+                prizeText = '😅 ¡Sigue intentando! Te damos un abrazo de ánimo 🤗';
             }
             
             prizeElement.innerHTML = prizeText;
