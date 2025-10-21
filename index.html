@@ -180,40 +180,43 @@
         }
 
         .prize {
-            font-size: 1.5em;
+            font-size: 1.3em;
             font-weight: bold;
             color: #9370DB;
-            margin: 15px 0;
-            padding: 15px;
-            border-radius: 10px;
+            margin: 12px 0;
+            padding: 12px;
+            border-radius: 8px;
             background: rgba(255, 182, 193, 0.2);
             border: 2px dashed #FF69B4;
+            line-height: 1.3;
         }
 
+        /* ESTILOS COMPACTOS PARA FACTURA */
         .customer-info {
             background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 8px 0;
             border-left: 4px solid #9370DB;
+            font-size: 0.85em;
         }
 
         .customer-name {
-            font-size: 1.3em;
+            font-size: 1em;
             color: #9370DB;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
 
         .customer-id {
-            font-size: 0.9em;
+            font-size: 0.8em;
             color: #666;
             font-family: monospace;
         }
 
         .instructions {
             background: rgba(255, 255, 255, 0.95);
-            padding: 25px;
+            padding: 20px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             border: 2px solid #9370DB;
@@ -222,9 +225,9 @@
 
         .instructions h3 {
             color: #9370DB;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
-            font-size: 1.4em;
+            font-size: 1.3em;
         }
 
         .instructions ul {
@@ -233,36 +236,38 @@
         }
 
         .instructions li {
-            padding: 12px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #E6E6FA;
             font-weight: 600;
             display: flex;
             align-items: center;
+            font-size: 0.9em;
         }
 
         .instructions li:before {
             content: "•";
             color: #FF69B4;
             font-weight: bold;
-            font-size: 1.5em;
-            margin-right: 10px;
+            font-size: 1.3em;
+            margin-right: 8px;
         }
 
         .note {
-            margin-top: 20px;
+            margin-top: 15px;
             font-style: italic;
             color: #666;
             text-align: center;
             background: #F8F8FF;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 10px;
+            border-radius: 8px;
             border-left: 4px solid #9370DB;
+            font-size: 0.85em;
         }
 
         .final-score {
-            font-size: 1.8em;
+            font-size: 1.5em;
             color: #9370DB;
-            margin: 20px 0;
+            margin: 15px 0;
             font-weight: bold;
             text-align: center;
         }
@@ -270,33 +275,34 @@
         .game-stats {
             display: flex;
             justify-content: space-around;
-            margin: 20px 0;
-            font-size: 1em;
+            margin: 12px 0;
+            font-size: 0.85em;
             color: #666;
             background: #F8F8FF;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 10px;
+            border-radius: 8px;
         }
 
         .warning {
             color: #dc3545;
             font-weight: bold;
             background: #ffe6e6;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 8px;
-            margin: 15px 0;
+            margin: 10px 0;
             border: 1px solid #dc3545;
-            font-size: 1.1em;
+            font-size: 0.95em;
         }
 
         .unique-code {
             background: #333;
             color: #fff;
-            padding: 10px;
+            padding: 6px 10px;
             border-radius: 5px;
             font-family: monospace;
-            margin: 10px 0;
-            font-size: 1.1em;
+            margin: 6px 0;
+            font-size: 0.9em;
+            text-align: center;
         }
     </style>
 </head>
@@ -335,27 +341,27 @@
                     <button onclick="showNameScreen()" class="start-btn">¡COMENZAR JUEGO!</button>
                 </div>
 
-                <!-- Pantalla de Resultados -->
+                <!-- Pantalla de Resultados COMPACTA -->
                 <div class="results" id="results" style="display: none;">
                     <h2>🎉 ¡JUEGO TERMINADO!</h2>
                     
-                    <!-- Información del Cliente -->
+                    <!-- Información del Cliente COMPACTA -->
                     <div class="customer-info">
-                        <div class="customer-name" id="displayCustomerName">Cliente: </div>
-                        <div class="customer-id">ID Único: <span id="uniqueCode"></span></div>
+                        <div class="customer-name" id="displayCustomerName"></div>
+                        <div class="customer-id">🔒 ID: <span id="uniqueCode"></span></div>
                     </div>
 
-                    <p class="final-score">Puntaje final: <span id="finalScore">0</span></p>
+                    <p class="final-score">Puntos: <span id="finalScore">0</span></p>
                     <div class="prize" id="prize"></div>
                     
-                    <!-- Código Único -->
+                    <!-- Código Único compacto -->
                     <div class="unique-code" id="uniqueCodeDisplay"></div>
                     
                     <div class="game-stats">
-                        <div>Donas atrapadas: <span id="caughtDonas">0</span></div>
-                        <div>Galletas evitadas: <span id="avoidedCookies">0</span></div>
+                        <div>🍩 Atrapadas: <span id="caughtDonas">0</span></div>
+                        <div>🍪 Evitadas: <span id="avoidedCookies">0</span></div>
                     </div>
-                    <button onclick="resetGame()" class="play-again">¿OTRO INTENTO?</button>
+                    <button onclick="resetGame()" class="play-again">¿JUGAR DE NUEVO?</button>
                 </div>
             </div>
         </div>
